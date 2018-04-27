@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using Nancy.Hosting.Self;
 
 namespace Anzu
 {
@@ -6,7 +7,10 @@ namespace Anzu
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+			var host = new NancyHost(new Uri("http://localhost:1234"));
+			host.Start();
+			Console.Write($"Hosting...");
+			Console.ReadLine();
         }
     }
 }
