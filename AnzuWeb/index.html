@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Anzu</title>
+	<script src="/res/js/jquery-3.3.1.min.js"></script>
+	<script src="/res/js/script.js"></script>
+	<style>
+		form
+		{
+			display: flex;
+			align-items: center;
+		}
+		#search
+		{
+			height: 100px;
+			width: 90%;
+			margin: auto;
+			padding: 20px;
+			font-size: 72px;
+		}
+		#content
+		{
+			width: 100%;
+			display: flex;
+			align-content: flex-start;
+			background-color: gray;
+		}
+		.Image
+		{
+			height: 200px;
+			width: 200px;
+			background-color: #eee;
+		}
+	</style>
+</head>
+<body>
+	<div>
+		<form>
+			<input placeholder="Search" type="search" id="search" value="@Model.search">
+		</form>
+		<div id="content">
+			<div class="Image">
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

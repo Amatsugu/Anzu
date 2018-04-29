@@ -1,8 +1,8 @@
 \c postgres
 DROP DATABASE IF EXISTS anzu;
 
-CREATE DATABASE anzu;
-\c anzu
+CREATE DATABASE anzu WITH OWNER anzu;
+\c anzu anzu
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE images (
@@ -13,7 +13,7 @@ CREATE TABLE images (
 
 CREATE TABLE tags (
 	 id uuid PRIMARY KEY,
-	 name TEXT NOT NULL,
+	 name TEXT NOT NULL UNIQUE,
 	 description TEXT,
 	 parent uuid REFERENCES tags ON DELETE CASCADE
 );
