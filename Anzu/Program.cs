@@ -11,6 +11,7 @@ namespace Anzu
 			host.Start();
 			Console.Write($"Hosting...");
 			Console.ReadLine();
+			host.Dispose();
         }
     }
 }
