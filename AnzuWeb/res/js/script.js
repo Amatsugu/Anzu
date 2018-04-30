@@ -4,6 +4,7 @@ $(document).ready(function ()
 	var form = $("form");
 	var content = $("#content");
 	var lastQuery = "";
+	var lastReq;
 	form.submit(function(e){
 		e.preventDefault();
 		searchBox.trigger("change");
@@ -23,7 +24,9 @@ $(document).ready(function ()
 		window.history.pushState("Anzu " + searchBox.val(), "Anzu Search", '/s/' + encodeURI(searchBox.val()));
 		var url = "/search/" + searchBox.val();
 		console.log(url);
-		$.ajax({
+		if(lastReq != null || lastReq != undefined)
+			lastReq.abort();
+		lastReq = $.ajax({
 			url : url
 		}).done(function(data){
 			let html = "";

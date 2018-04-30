@@ -104,7 +104,7 @@ namespace Anzu
 				Name = "Girl and boy with dog"
 			}).AddTag(dog).AddTag(boy).AddTag(girl);
 
-			Console.WriteLine("Added ");
+			Console.WriteLine("Added ");	
 			Console.ReadLine();
 			host.Dispose();
         }
