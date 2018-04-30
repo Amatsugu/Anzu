@@ -11,7 +11,7 @@ namespace Anzu.Models
 	{
 		public Guid Id { get; set; }
 		public string Name { get; set; }
-		public List<TagModel> Tags
+		/*public List<TagModel> Tags
 		{
 			get
 			{
@@ -22,7 +22,7 @@ namespace Anzu.Models
 			}
 		}
 
-		private List<TagModel> _tags;
+		private List<TagModel> _tags;*/
 
 		public ImageModel AddTag(Guid tagID)
 		{
