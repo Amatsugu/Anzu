@@ -9,7 +9,7 @@ namespace Anzu
 {
     class AnzuCore
     {
-		private static T RunCommand<T>(Func<NpgsqlCommand, T> func)
+		public static T RunCommand<T>(Func<NpgsqlCommand, T> func)
 		{
 			using (var con = new NpgsqlConnection("Host=karuta.luminousvector.com;Username=anzu;Password=;Database=anzu"))
 			{
@@ -20,6 +20,22 @@ namespace Anzu
 				}
 			}
 		}
+
+		internal static TagModel AddTag(TagModel tag) => RunCommand(cmd =>
+		{
+			tag.Id = Guid.NewGuid();
+			cmd.CommandText = $"INSERT INTO tags VALUES ('{tag.Id}', '{Uri.EscapeDataString(tag.Name)}', '{Uri.EscapeDataString(tag.Description)}', {(tag.Parent == default ? "null" : $"'{tag.Parent}'" )})";
+			cmd.ExecuteNonQuery();
+			return tag;
+		});
+
+		public static void AddContradiction(TagModel tag1, TagModel tag2) => AddContradiction(tag1.Id, tag2.Id);
+
+		public static void AddContradiction(Guid tag1, Guid tag2) => RunCommand(cmd =>
+		{
+			cmd.CommandText = $"INSERT INTO contradictions VALUES('{tag1}', '{tag2}')";
+			return cmd.ExecuteNonQuery();
+		});
 
 		public static List<ImageModel> Search(string query) => RunCommand(cmd =>
 		{
@@ -44,7 +60,7 @@ namespace Anzu
 					images.Add(new ImageModel
 					{
 						Id = reader.GetGuid(0),
-						Name = reader.GetString(1)
+						Name = Uri.UnescapeDataString(reader.GetString(1))
 					});
 				}
 			}
@@ -64,6 +80,14 @@ namespace Anzu
 					Name = Uri.UnescapeDataString(reader.GetString(0)),
 				};
 			}
+		});
+
+		public static ImageModel AddImage(ImageModel image) => RunCommand(cmd =>
+		{
+			image.Id = Guid.NewGuid();
+			cmd.CommandText = $"INSERT INTO images VALUES('{image.Id}', '{Uri.EscapeDataString(image.Name)}', 'FFFF')";
+			cmd.ExecuteNonQuery();
+			return image;
 		});
 
 		public static List<TagModel> SearchTags(string query) => RunCommand(cmd => 

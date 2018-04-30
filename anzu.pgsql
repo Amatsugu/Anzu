@@ -1,14 +1,15 @@
-\c postgres
+\c postgres postgres
 DROP DATABASE IF EXISTS anzu;
 
 CREATE DATABASE anzu WITH OWNER anzu;
-\c anzu anzu
+\c anzu postgres
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+\c anzu anzu
 
 CREATE TABLE images (
 	 id uuid PRIMARY KEY,
 	 name TEXT NOT NULL,
-	 iamge bytea NOT NULL
+	 image bytea NOT NULL
 );
 
 CREATE TABLE tags (
@@ -37,7 +38,7 @@ CREATE FUNCTION add_parent_tags() RETURNS trigger AS $tag$
 	 DECLARE pTag uuid;
 	 BEGIN
 		  pTag = (SELECT parent FROM tags WHERE id = NEW.tag_id);
-		  IF (pTag NOTNULL) AND (NOT EXISTS (SELECT tag_id FROM tagmap WHERE tag_id = pTag)) THEN
+		  IF (pTag NOTNULL) AND (NOT EXISTS (SELECT tag_id FROM tagmap WHERE tag_id = pTag AND image_id = NEW.image_id)) THEN
 				INSERT INTO tagmap VALUES (NEW.image_id, pTag);
 		  END IF;
 		  RETURN NEW;
@@ -54,7 +55,7 @@ CREATE FUNCTION remove_child_tags() RETURNS TRIGGER AS $tag$
 	 DECLARE childRow record;
 	 BEGIN
 		  FOR childRow IN SELECT id FROM tags WHERE parent = OLD.tag_id LOOP
-				DELETE FROM tagmap WHERE tag_id = childRow.id;
+				DELETE FROM tagmap WHERE tag_id = childRow.id AND image_id = OLD.image_id;
 		  END LOOP;
 		  RETURN OLD;
 	 END;
